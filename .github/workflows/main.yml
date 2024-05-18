@@ -7,18 +7,17 @@ on:
 
 jobs:
   main:
-    name: ${{ matrix.runtime.name }} on ${{ matrix.sdk.name }}
+    name: ${{ matrix.runtime.name }} on ${{ matrix.framework }}
     runs-on: ${{ matrix.runtime.runs-on }}
     container: ${{ matrix.runtime.container }}
   
     strategy:
       fail-fast: false
       matrix:
-        sdk:
-        - name: dotnet6
-          framework: net6.0
-        - name: dotnet8
-          framework: net8.0  
+        framework:
+        - net48
+        - net6.0
+        - net8.0  
         runtime: 
         - name: win-x64
           runs-on: windows-latest
@@ -68,14 +67,19 @@ jobs:
           apk add libstdc++ libgcc
 
 
+      - name: Choco help
+        uses: crazy-max/ghaction-chocolatey@v3
+        if: ${{ matrix.framework == 'net48' }}
+        with:
+          args: install dotnet4.6 dotnet4.8 --confirm
+
+
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
             8.0.x
             6.0.x
-
-
 
 
       - name: Build solution
@@ -86,9 +90,9 @@ jobs:
           DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
         run: |
           dotnet --list-sdks
-          dotnet test QuestPDF.UnitTests --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
-          dotnet test QuestPDF.LayoutTests --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
-          dotnet test QuestPDF.Examples --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
+          dotnet test QuestPDF.UnitTests --configuration Release --framework ${{ matrix.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
+          dotnet test QuestPDF.LayoutTests --configuration Release --framework ${{ matrix.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
+          dotnet test QuestPDF.Examples --configuration Release --framework ${{ matrix.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
 
         
       - name: Upload build artifacts
