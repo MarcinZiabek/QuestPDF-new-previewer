@@ -7,13 +7,14 @@ on:
 
 jobs:
   main:
-    name: ${{ matrix.runtime.name }}
+    name: ${{ matrix.runtime.name }} on .NET ${{ matrix.dotnet-version }}
     runs-on: ${{ matrix.runtime.runs-on }}
     container: ${{ matrix.runtime.container }}
   
     strategy:
       fail-fast: false
       matrix:
+        dotnet-version: ['6.0.x', '8.0.x']
         runtime: 
         - name: win-x64
           runs-on: windows-latest
@@ -66,7 +67,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: ${{ matrix.dotnet-version }}
 
 
       - name: Build solution
