@@ -16,10 +16,8 @@ jobs:
       matrix:
         sdk:
         - name: dotnet6
-          version: 6.0.x
           framework: net6.0
         - name: dotnet8
-          version: 8.0.x
           framework: net8.0  
         runtime: 
         - name: win-x64
@@ -73,7 +71,11 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ matrix.sdk.version }}
+          dotnet-version: |
+            8.0.x
+            6.0.x
+
+
 
 
       - name: Build solution
