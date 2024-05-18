@@ -85,10 +85,9 @@ jobs:
           TEST_SHOW_RESULTS: false
           DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
         run: |
-          dotnet build --configuration Release --framework ${{ matrix.sdk.framework }} --property:WarningLevel=2
-          dotnet test QuestPDF.UnitTests --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }}
-          dotnet test QuestPDF.LayoutTests --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }}
-          dotnet test QuestPDF.Examples --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }}
+          dotnet test QuestPDF.UnitTests --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
+          dotnet test QuestPDF.LayoutTests --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
+          dotnet test QuestPDF.Examples --configuration Release --framework ${{ matrix.sdk.framework }} --runtime ${{ matrix.runtime.name }} --property:WarningLevel=2
 
         
       - name: Upload build artifacts
